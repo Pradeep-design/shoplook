@@ -1,0 +1,13 @@
+{% extends 'shop/basic.html' %}
+
+{% block body %}
+<form method="post" action="" enctype="multipart/form-data">
+      {% csrf_token %}
+    <div class="container" style="background-color: red;text-align:centre">
+        <div class="form" style="margin-top:20px; ">{{form.as_p}}</div>
+     <button type="submit">Post</button>
+    </div>
+ </form>
+ <div id='heart' class='button'></div>
+
+{% endblock %}

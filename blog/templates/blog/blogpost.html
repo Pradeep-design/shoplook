@@ -1,0 +1,220 @@
+{% extends 'shop/basic.html' %}
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      xmlns="http://www.w3.org/1999/html">
+.col-auto d-none d-lg-block{
+    padding: 25px;
+}
+.fa{
+  font-size:50px;
+  cursor:pointer;
+  user-select:none;
+}
+.fa:hover{
+ color:darkblue;
+}
+.btn btn-block btn primary
+{
+width:20px;
+height:30px;
+}
+{% endblock %}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-8 blog-main">
+            <h3 class="font-italic">
+                {{post.title}}
+
+            </h3>
+
+            <div class="blog-post">
+                <h6 class="blog-post-title">{{post.pub_date}}</h6>
+                <p class="blog-post-meta">{{post.heading0}}<a href="#">Mark</a></p>
+                <div class="fb-like" data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}" data-layout="standard" data-action="like" data-size="large" data-show-faces="false" data-share="true"></div><br>
+                <div class="col-auto d-none d-lg-block">
+                    <img src='/media/{{post.thumbnail}}' class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
+                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
+                        aria-label="Placeholder: Thumbnail">
+                </div>
+
+                <h2>{{post.head0}}</h2>
+                <p>{{post.chead0}}</p>
+                <h2>{{post.head1}}</h2>
+                <p>{{post.chead1}}</p>
+                <h2>{{post.head2}}</h2>
+                <p>{{post.chead2}}</p>
+                {% if user.is_authenticated and request.user.username == post.user.username  %}
+                  <form method="post">
+                      {% csrf_token %}
+                     <a href="/blog/blog_delete/{{post.post_id}}"><button type="button">Delete</button></a>
+                  </form>
+                {% endif %}`
+                <br>
+                    <input type="button"    id="like{{post.post_id}}" name="{{post.slug}}" value=''/>
+                 <div class="container" id="heart">{{post.likes.count}}</div>
+
+
+
+            </div><!-- /.blog-post -->
+
+
+
+
+        </div><!-- /.blog-main -->
+
+        <aside class="col-md-4 blog-sidebar">
+            <div class="p-4 mb-3 bg-light rounded">
+                <h4 class="font-italic">About</h4>
+                <p class="mb-0">My Awesome Cart <em>started out as a small project and is now</em> the fastest growing e-commerce stores of all times in india and abroad.</p>
+               <div class="my-3 fb-share-button" data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8000%2Fblog%2Fblogpost%2F4&src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+            </div>
+
+
+
+            <div class="p-4">
+                <h4 class="font-italic">Elsewhere</h4>
+                <ol class="list-unstyled">
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ol>
+            </div>
+
+
+        <div class="container">
+                <h3>Comment ({{comment.count}})</h3>
+            <form  action="/blog/blogComment" method="post">
+                {%csrf_token%}
+                <div class="row">
+                    <div class="col md-2">Image here</div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail">Post Comment</label>
+                        {%if user.is_authenticated %}
+                           <input type="text" class="form-control" placeholder="Enter Comment here" name="comment">
+                        {% endif %}
+
+                    </div>
+
+                      <input type="hidden" name="post_id" value="{{post.post_id}}" placeholder="comment here">
+                        <input type="submit" class="btn btn-light" value="Post" style="color:red">
+                </div>
+
+            </div>
+            </form>
+
+<div class="container">
+    <div class="dropdown">
+        <button class="btn-btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">more comment
+        <span class="caret"></span> </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1"> dg</ul>
+    </div>
+</div>
+<div class="dropdown">
+  {% for comments in comment%}
+
+ <div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="user d-flex flex-row align-items-center"> <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2"> <span><small class="font-weight-bold text-primary">{{comments.user.username}}</small> <small class="font-weight-bold text-secondary"><p style="font-size:10px;">{{comments.timestamp}}</p><p>{{comments.comment}}</p></small></span> </div> <small>2 days ago</small>
+                </div>
+ {% if user.is_authenticated and request.user.username == comments.user.username %}
+           <button id="{{comments.sno}}"   type="button" class="btn btn-primary">Update</button>
+              <form method="post" id="pr{{comments.sno}}" style="display:none;" class="comment-form">
+                   {% csrf_token %}
+
+
+                  <div class="container">
+                      <p>Please fill in this form to create an account.</p>
+                  <hr>
+                    <label id="us"  runat="server" ><b>{{comments.comment}}</b></label>
+                   <input type="text" id="co{{comments.sno}}" placeholder="comment"    required>
+                     <button><input type="submit" id="su{{comments.sno}}"  value="Post"></button>
+
+                  </div>
+
+           </form>
+           <div class="action d-flex justify-content-between mt-2 align-items-center">
+                    <div class="reply px-4"> <small>Remove</small> <span class="dots"></span> <small>Reply</small> <span class="dots"></span> <small>Translate</small> </div>
+                    <div class="icons align-items-center"> <i class="fa fa-star text-warning"></i> <i class="fa fa-check-circle-o check-icon"></i> </div>
+           </div>
+ {% endif %}
+        </div>
+        </div>
+    </div>
+</div>
+
+        </aside><!-- /.blog-sidebar -->
+    </div>
+    </div>
+</div>
+
+
+
+<script>
+   $(document).ready(function(){
+      $("#{{comments.sno}}").click(function(){
+         $("#pr{{comments.sno}}").slideToggle();
+          $('#su{{comments.sno}}').click(function(e){
+            var u = $('#us{{comments.sno}}').text();
+                 console.log(u);
+
+                 {%if  user.is_authenticated %}
+                 var comment =  $('#co{{comments.sno}}').val();
+
+                  e.preventDefault();
+                  $.ajax({
+                   type : 'POST',
+                   url: '/blog/blogCommentUpdate/{{comments.sno}}',
+                   csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val(),
+                   data:{
+                     comment:comment,
+                     csrfmiddlewaretoken :$('input[name=csrfmiddlewaretoken').val(),
+                   },
+                   success : function(response,data){
+                       $('#pr{{comment.sno}}').html(response['comment_update']);
+                       window.reload();
+                    },
+
+                  });
+                  {% endif %}
+
+                  });
+            });
+
+    });
+
+
+
+</script>
+
+
+{% endfor %}
+
+<script>
+ $('#like{{post.post_id}}').click(function(){
+
+       $.ajax({
+          type : 'POST',
+          url : '{% url 'like' post.post_id %}',
+          data :{'slug' : $(this).attr('name'),'csrfmiddlewaretoken':'{{csrf_token}}'},
+          dataType: "json",
+
+          success : function(response,data){
+            $('#heart').html(response['likes_count']);
+            console.log($('#heart').html(response['likes_count']));
+
+          },
+
+
+       });
+      });
+
+</script>
+
+</script>
+
+{% endblock %}

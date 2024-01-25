@@ -1,0 +1,40 @@
+{% extends 'shop/basic.html' %}
+{% block css %}
+
+{% endblock %}
+{% block body %}
+
+
+<a href="/blog/blog_create/" class="btn btn-danger" type="button">post blog</a>
+<div class="container" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+    <div class="row my-2">
+        {% for items in myposts %}
+
+        <div class="col-md-6">
+            <div
+                class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-1 text-primary">{{items.user.username}}</strong>
+                    <strong class="d-inline-block mb-2 text-primary">{{items.title}}</strong>
+                    <div class="mb-1 text-muted">{{items.pub_date}}</div>
+                    <p class="card-text mb-auto">{{items.head0}}</p>
+                    <p class="card-text mb-auto">{{items.head1}}</p>
+                    <p class="card-text mb-auto">{{items.head2}}</p>
+                    <a href="blogpost/{{items.post_id}}" class="stretched-link">Continue reading</a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <img src='/media/{{items.thumbnail}}' class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
+                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
+                        aria-label="Placeholder: Thumbnail">
+                </div>
+            </div>
+        </div>
+    {% if forloop.counter|divisibleby:2 %}
+    </div><div class="row my-2">
+    {% endif %}
+
+ {% endfor %}
+</div>
+
+{% endblock %}
